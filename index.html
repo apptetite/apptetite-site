@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apptetite — Cook better, easier, faster and cheaper at home</title>
+<meta name="description" content="Apptetite helps you cook better, easier, faster and cheaper at home, with and without AI. Meet MacroPlate, our macro-focused recipe app.">
+<meta property="og:title" content="Apptetite">
+<meta property="og:description" content="Cook better, easier, faster and cheaper at home.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --tomato: #E8402B;
+    --tomato-dark: #B92E1C;
+    --basil: #2F8F4E;
+    --butter: #FFC94A;
+    --cream: #FFF6EC;
+    --char: #1E1A17;
+    --muted: #6E655D;
+    --card: #FFFFFF;
+    --radius: 22px;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--cream); color: var(--char); line-height: 1.55;
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- Nav ---------- */
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 22px 0; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 24px; letter-spacing: -0.5px; text-decoration: none; }
+  .logo svg { width: 36px; height: 36px; }
+  .logo span span { color: var(--tomato); }
+  nav .links a { font-weight: 700; text-decoration: none; margin-left: 24px; font-size: 15px; }
+  nav .links a:hover { color: var(--tomato); }
+
+  /* ---------- Hero ---------- */
+  .hero { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center; padding: 40px 0 80px; }
+  .tag { display: inline-block; background: var(--char); color: var(--butter); font-weight: 800; font-size: 13px;
+         letter-spacing: 1.5px; text-transform: uppercase; padding: 7px 14px; border-radius: 99px; }
+  h1 { font-size: clamp(44px, 7vw, 84px); line-height: 0.98; font-weight: 900; letter-spacing: -2.5px; margin: 20px 0 22px; }
+  h1 em { font-style: normal; color: var(--tomato); }
+  .lede { font-size: 20px; color: var(--muted); max-width: 520px; }
+  .cta { display: flex; gap: 14px; margin-top: 32px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 17px; text-decoration: none;
+         padding: 16px 26px; border-radius: 16px; border: 3px solid var(--char); transition: transform .15s, box-shadow .15s; }
+  .btn.primary { background: var(--tomato); color: #fff; box-shadow: 5px 5px 0 var(--char); }
+  .btn.ghost { background: transparent; }
+  .btn:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--char); }
+  .btn.ghost:hover { box-shadow: 5px 5px 0 var(--char); }
+  .hero-art { position: relative; aspect-ratio: 1; }
+  .hero-art .blob { position: absolute; inset: 6%; background: var(--tomato); border-radius: 46% 54% 52% 48% / 50% 44% 56% 50%; }
+  .hero-art svg { position: relative; width: 100%; height: 100%; }
+  .steam path { animation: steam 3s ease-in-out infinite; opacity: 0; }
+  .steam path:nth-child(2) { animation-delay: 1s; }
+  .steam path:nth-child(3) { animation-delay: 2s; }
+  @keyframes steam { 0% { opacity: 0; transform: translateY(10px); } 40% { opacity: .9; } 100% { opacity: 0; transform: translateY(-24px); } }
+
+  /* ---------- Pillars ---------- */
+  .band { background: var(--char); color: var(--cream); padding: 22px 0; overflow: hidden; }
+  .band .row { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 14px 28px; font-weight: 900; font-size: 22px; letter-spacing: -0.3px; }
+  .band .row b { color: var(--butter); }
+
+  section { padding: 90px 0; }
+  h2 { font-size: clamp(34px, 4.5vw, 52px); font-weight: 900; letter-spacing: -1.5px; line-height: 1.05; }
+  h2 em { font-style: normal; color: var(--tomato); }
+  .sub { color: var(--muted); font-size: 19px; margin-top: 12px; max-width: 640px; }
+
+  /* ---------- App features ---------- */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 44px; }
+  .card { background: var(--card); border: 3px solid var(--char); border-radius: var(--radius); padding: 26px; box-shadow: 6px 6px 0 var(--char); }
+  .card .icon { width: 58px; height: 58px; border-radius: 16px; display: grid; place-items: center; font-size: 30px; margin-bottom: 16px; }
+  .card h3 { font-size: 21px; font-weight: 900; letter-spacing: -0.4px; margin-bottom: 6px; }
+  .card p { color: var(--muted); }
+
+  /* ---------- Timer demo ---------- */
+  .demo { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 48px; align-items: start; }
+  .recipe { background: var(--card); border: 3px solid var(--char); border-radius: var(--radius); box-shadow: 8px 8px 0 var(--tomato); overflow: hidden; }
+  .recipe header { background: linear-gradient(135deg, #5B6EE1, #A5B4FC); padding: 26px; display: flex; align-items: center; gap: 16px; color: #fff; }
+  .recipe header .emoji { font-size: 52px; }
+  .recipe header h3 { font-size: 22px; font-weight: 900; line-height: 1.15; }
+  .recipe header small { opacity: .9; font-weight: 600; }
+  .macros { display: flex; gap: 8px; padding: 16px 22px 0; flex-wrap: wrap; }
+  .pill { font-size: 13px; font-weight: 800; padding: 4px 11px; border-radius: 99px; }
+  .steps { list-style: none; padding: 10px 22px 24px; counter-reset: s; }
+  .steps li { display: grid; grid-template-columns: 34px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px dashed #E6DCCF; }
+  .steps li:last-child { border-bottom: 0; }
+  .steps li::before { counter-increment: s; content: counter(s); width: 30px; height: 30px; border-radius: 50%; background: var(--basil);
+                      color: #fff; font-weight: 800; font-size: 14px; display: grid; place-items: center; }
+
+  .timer { margin-top: 10px; display: inline-flex; align-items: center; gap: 10px; border: 0; cursor: pointer; font: inherit;
+           padding: 6px 16px 6px 6px; border-radius: 99px; background: #DDEFE2; color: var(--char); transition: background .3s, opacity .3s; text-align: left; }
+  .timer .dial { width: 38px; height: 38px; position: relative; display: grid; place-items: center; font-size: 19px; }
+  .timer .dial svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+  .timer .dial circle { fill: none; stroke-width: 4; }
+  .timer .t { font-weight: 800; font-size: 15px; line-height: 1.2; font-variant-numeric: tabular-nums; }
+  .timer .s { font-size: 12.5px; color: var(--muted); }
+  .timer[data-state="locked"] { background: #EEE7DE; opacity: .75; cursor: not-allowed; }
+  .timer[data-state="running"] { background: #FCE7B8; }
+  .timer[data-state="running"] .ico { animation: flip 1.6s infinite; display: inline-block; }
+  .timer[data-state="ringing"] { background: #FBD3CC; box-shadow: 0 0 0 3px var(--tomato); animation: pulse .9s infinite; }
+  .timer[data-state="ringing"] .ico { animation: shake .22s infinite alternate; display: inline-block; }
+  .timer[data-state="ringing"] .s { color: var(--tomato-dark); }
+  .timer[data-state="done"] { background: #CFE8D7; }
+  @keyframes flip { 0%, 62% { transform: rotate(0); } 100% { transform: rotate(180deg); } }
+  @keyframes shake { from { transform: rotate(-18deg); } to { transform: rotate(18deg); } }
+  @keyframes pulse { 50% { box-shadow: 0 0 0 6px rgba(232,64,43,.35); } }
+  .hint { min-height: 24px; font-size: 14px; font-weight: 700; color: var(--tomato-dark); margin-top: 14px; }
+  .how { list-style: none; padding: 0; margin-top: 28px; display: grid; gap: 14px; }
+  .how li { display: flex; gap: 14px; align-items: flex-start; font-size: 17px; }
+  .how li b { flex: none; width: 34px; height: 34px; border-radius: 12px; display: grid; place-items: center; font-size: 18px; }
+  .note { margin-top: 22px; font-size: 14px; color: var(--muted); }
+  .reset { margin-top: 18px; background: none; border: 2px solid var(--char); border-radius: 12px; padding: 8px 14px; font: inherit; font-weight: 800; cursor: pointer; }
+
+  /* ---------- Coming soon ---------- */
+  .soon { background: var(--tomato); color: #fff; border-radius: 32px; padding: 60px 48px; text-align: center; border: 3px solid var(--char); box-shadow: 10px 10px 0 var(--char); }
+  .soon h2 em { color: var(--butter); }
+  .soon p { font-size: 19px; max-width: 620px; margin: 14px auto 0; opacity: .95; }
+
+  footer { padding: 50px 0 60px; color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+  @media (max-width: 860px) {
+    .hero, .demo { grid-template-columns: 1fr; }
+    .hero-art { max-width: 380px; margin: 0 auto; order: -1; }
+    nav .links { display: none; }
+    section { padding: 64px 0; }
+    .soon { padding: 44px 24px; }
+  }
+  @media (prefers-reduced-motion: reduce) { *, *::before { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <a class="logo" href="/" aria-label="Apptetite home">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="36" r="24" fill="#E8402B"/><ellipse cx="24" cy="28" rx="7" ry="4" fill="#fff" opacity=".35" transform="rotate(-30 24 28)"/><path d="M32 14c-3-6-9-7-13-5 5 1 8 3 9 6-5-2-10-1-13 2 5 0 9 1 12 3l5-1 5 1c3-2 7-3 12-3-3-3-8-4-13-2 1-3 4-5 9-6-4-2-10-1-13 5z" fill="#2F8F4E"/></svg>
+      <span>Appt<span>e</span>tite</span>
+    </a>
+    <div class="links">
+      <a href="#app">The app</a>
+      <a href="#timers">Smart timers</a>
+      <a href="#soon">Coming soon</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <span class="tag">Home cooking, upgraded</span>
+      <h1>Cook <em>better.</em><br>Easier. Faster.<br>Cheaper.</h1>
+      <p class="lede">Apptetite helps you cook great food at home, with and without AI. Recipes built around your macros, a planner for the week, and a shopping list that sorts itself.</p>
+      <div class="cta">
+        <a class="btn primary" href="#timers">Try a smart timer →</a>
+        <a class="btn ghost" href="#app">See the app</a>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="blob"></div>
+      <!-- Frying pan with tomatoes and basil -->
+      <svg viewBox="0 0 400 400">
+        <g class="steam" fill="none" stroke="#FFF6EC" stroke-width="7" stroke-linecap="round">
+          <path d="M150 120c-12-18 12-28 0-48"/>
+          <path d="M200 110c-12-18 12-28 0-48"/>
+          <path d="M250 120c-12-18 12-28 0-48"/>
+        </g>
+        <rect x="292" y="232" width="118" height="26" rx="13" fill="#1E1A17" transform="rotate(-18 292 232)"/>
+        <ellipse cx="190" cy="250" rx="138" ry="104" fill="#1E1A17"/>
+        <ellipse cx="190" cy="240" rx="118" ry="84" fill="#3A332E"/>
+        <circle cx="150" cy="232" r="34" fill="#E8402B" stroke="#1E1A17" stroke-width="5"/>
+        <circle cx="228" cy="214" r="30" fill="#E8402B" stroke="#1E1A17" stroke-width="5"/>
+        <circle cx="214" cy="270" r="26" fill="#FF6A4D" stroke="#1E1A17" stroke-width="5"/>
+        <circle cx="140" cy="222" r="7" fill="#fff" opacity=".45"/>
+        <circle cx="220" cy="204" r="6" fill="#fff" opacity=".45"/>
+        <path d="M150 198l-6-10m6 10l8-9m-8 9l-1 -12" stroke="#2F8F4E" stroke-width="5" stroke-linecap="round"/>
+        <path d="M228 184l-6-9m6 9l8-8" stroke="#2F8F4E" stroke-width="5" stroke-linecap="round"/>
+        <ellipse cx="270" cy="252" rx="22" ry="11" fill="#2F8F4E" transform="rotate(-30 270 252)"/>
+        <ellipse cx="114" cy="276" rx="20" ry="10" fill="#2F8F4E" transform="rotate(25 114 276)"/>
+        <circle cx="178" cy="286" r="9" fill="#FFC94A"/>
+        <circle cx="258" cy="292" r="7" fill="#FFC94A"/>
+      </svg>
+    </div>
+  </header>
+</div>
+
+<div class="band">
+  <div class="wrap row">
+    <span><b>✓</b> Better</span><span><b>✓</b> Easier</span><span><b>✓</b> Faster</span><span><b>✓</b> Cheaper</span>
+  </div>
+</div>
+
+<section id="app">
+  <div class="wrap">
+    <span class="tag">Meet MacroPlate</span>
+    <h2 style="margin-top:16px">Recipes that know<br>your <em>macros.</em></h2>
+    <p class="sub">MacroPlate is our recipe app for Android. Every recipe shows protein, carbs, fat and calories per serving, and everything scales when you change servings.</p>
+    <div class="grid">
+      <div class="card"><div class="icon" style="background:#FDE2DC">🍳</div><h3>Macro-first recipes</h3><p>Breakfast to dessert, filtered by high protein, under 400 calories, vegetarian, quick and more.</p></div>
+      <div class="card"><div class="icon" style="background:#DDEFE2">📅</div><h3>Weekly planner</h3><p>Drop recipes into your week and see daily totals against your targets at a glance.</p></div>
+      <div class="card"><div class="icon" style="background:#FFF0C7">🛒</div><h3>Smart shopping list</h3><p>Add a recipe and its ingredients merge into one list, sorted by supermarket aisle.</p></div>
+      <div class="card"><div class="icon" style="background:#FDE2DC">⏱️</div><h3>Step timers</h3><p>Tap a timer right inside the method. Steps that depend on each other unlock in order.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="timers" style="background:#FFEDE0; border-top:3px solid var(--char); border-bottom:3px solid var(--char)">
+  <div class="wrap demo">
+    <div>
+      <span class="tag">Try it live</span>
+      <h2 style="margin-top:16px">Timers that know<br>what comes <em>next.</em></h2>
+      <p class="sub">You can't cool a bake that hasn't been baked. MacroPlate reads each step, finds the timers, and locks the ones that have to wait.</p>
+      <ul class="how">
+        <li><b style="background:#DDEFE2">⏱️</b><span><strong>Tap to start.</strong> The timer turns amber and counts down.</span></li>
+        <li><b style="background:#EEE7DE">🔒</b><span><strong>Locked until ready.</strong> The next timer opens the moment this one finishes.</span></li>
+        <li><b style="background:#FBD3CC">🔔</b><span><strong>Time's up!</strong> It rings until you stop it, even with your phone locked.</span></li>
+      </ul>
+      <p class="note">This demo runs at 60× speed, so a minute takes one second.</p>
+    </div>
+
+    <article class="recipe">
+      <header>
+        <span class="emoji">🫐</span>
+        <div><h3>Blueberry Protein Oat Bake</h3><small>Serves 4 · 10 min prep · 30 min cook</small></div>
+      </header>
+      <div class="macros">
+        <span class="pill" style="background:#FDE2DC;color:#B92E1C">312 cal</span>
+        <span class="pill" style="background:#FDE2DC;color:#C2410C">P 24g</span>
+        <span class="pill" style="background:#FFF0C7;color:#92600A">C 38g</span>
+        <span class="pill" style="background:#D5F0EC;color:#1D6F65">F 7g</span>
+      </div>
+      <ol class="steps">
+        <li><div>Heat the oven to 180°C (350°F) and line a 20 cm square dish.</div></li>
+        <li><div>Mix the oats, protein powder, baking powder and cinnamon. Whisk in the eggs, milk, yoghurt and maple syrup.</div></li>
+        <li><div>Fold in most of the blueberries, pour into the dish and scatter the rest on top.</div></li>
+        <li>
+          <div>Bake for 28–32 minutes until set in the middle. Cool for 10 minutes and cut into 4.
+            <div><button class="timer" data-id="bake" data-min="28" data-label="Bake · 28–32 min"></button></div>
+            <div><button class="timer" data-id="cool" data-min="10" data-after="bake" data-label="Cool · 10 min"></button></div>
+          </div>
+        </li>
+      </ol>
+      <div style="padding:0 22px 22px">
+        <div class="hint" id="hint" role="status"></div>
+        <button class="reset" id="reset">↺ Reset demo</button>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="soon">
+  <div class="wrap">
+    <div class="soon">
+      <span class="tag">In the oven</span>
+      <h2 style="margin-top:16px">MacroPlate is <em>coming soon.</em></h2>
+      <p>We're testing the Android app now, with more Apptetite tools for faster, cheaper home cooking on the way.</p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <footer>
+    <span>© <span id="yr"></span> Apptetite · apptetite.com</span>
+    <span>Made for home cooks 🍅</span>
+  </footer>
+</div>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // ---- Step timer demo (mirrors the app: locked → ready → running → ringing → done) ----
+  const SPEED = 60; // demo: one minute passes per second
+  const timers = [...document.querySelectorAll('.timer')];
+  const state = {}; // id -> { status, end, total, rem }
+  const hint = document.getElementById('hint');
+  let audioCtx, beepLoop;
+
+  const fmt = ms => { const s = Math.ceil(Math.max(0, ms) / 1000); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+  const finished = id => ['ringing', 'done'].includes(state[id]?.status);
+  const locked = el => !state[el.dataset.id] && el.dataset.after && !finished(el.dataset.after);
+
+  function beep() {
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      [0, 0.25].forEach(t => {
+        const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+        o.frequency.value = 880; o.connect(g); g.connect(audioCtx.destination);
+        g.gain.setValueAtTime(0.18, audioCtx.currentTime + t);
+        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + t + 0.2);
+        o.start(audioCtx.currentTime + t); o.stop(audioCtx.currentTime + t + 0.22);
+      });
+    } catch (e) {}
+  }
+  function updateAlarm() {
+    const ringing = Object.values(state).some(s => s.status === 'ringing');
+    if (ringing && !beepLoop) { beep(); beepLoop = setInterval(beep, 1200); }
+    if (!ringing && beepLoop) { clearInterval(beepLoop); beepLoop = null; }
+  }
+
+  function render() {
+    const now = Date.now();
+    timers.forEach(el => {
+      const id = el.dataset.id, s = state[id];
+      if (s && s.status === 'running' && s.end <= now) { s.status = 'ringing'; }
+      const st = locked(el) ? 'locked' : (s ? s.status : 'ready');
+      el.dataset.state = st;
+      const rem = s ? (s.status === 'running' ? s.end - now : s.status === 'paused' ? s.rem : 0) : 0;
+      const frac = s && (s.status === 'running' || s.status === 'paused') ? rem / s.total : 0;
+      const col = { locked: '#6E655D', ready: '#2F8F4E', running: '#D9922B', paused: '#D9922B', ringing: '#E8402B', done: '#2F8F4E' }[st];
+      const icon = { locked: '🔒', ready: '⏱️', running: '⏳', paused: '⏸️', ringing: '🔔', done: '✅' }[st];
+      const before = timers.find(t => t.dataset.id === el.dataset.after);
+      const title = { running: fmt(rem / SPEED * 60), paused: fmt(rem / SPEED * 60), ringing: "Time's up!", done: el.dataset.label.split(' · ')[0] + ' done' }[st] || el.dataset.label;
+      const sub = {
+        locked: 'Unlocks after ' + (before ? before.dataset.label.split(' · ')[0] : 'the previous timer'),
+        ready: 'Tap to start', running: 'Tap to pause', paused: 'Paused · tap to resume',
+        ringing: 'Tap to stop the alarm', done: 'Tap to reset',
+      }[st];
+      const ring = (st === 'running' || st === 'paused')
+        ? `<svg viewBox="0 0 38 38"><circle cx="19" cy="19" r="16" stroke="${col}33"/><circle cx="19" cy="19" r="16" stroke="${col}" stroke-linecap="round" stroke-dasharray="${(2 * Math.PI * 16 * frac).toFixed(1)} 200"/></svg>` : '';
+      el.innerHTML = `<span class="dial">${ring}<span class="ico">${icon}</span></span><span><span class="t">${title}</span><br><span class="s">${sub}</span></span>`;
+      el.setAttribute('aria-label', title + '. ' + sub);
+    });
+    updateAlarm();
+  }
+
+  timers.forEach(el => el.addEventListener('click', () => {
+    const id = el.dataset.id, s = state[id];
+    hint.textContent = '';
+    if (locked(el)) {
+      const before = timers.find(t => t.dataset.id === el.dataset.after);
+      hint.textContent = 'Finish the ' + before.dataset.label.split(' · ')[0].toLowerCase() + ' timer first.';
+      return;
+    }
+    const total = el.dataset.min * 60000 / SPEED;
+    if (!s) state[id] = { status: 'running', end: Date.now() + total, total };
+    else if (s.status === 'running') { s.status = 'paused'; s.rem = s.end - Date.now(); }
+    else if (s.status === 'paused') { s.status = 'running'; s.end = Date.now() + s.rem; }
+    else if (s.status === 'ringing') s.status = 'done';
+    else if (s.status === 'done') delete state[id];
+    render();
+  }));
+  document.getElementById('reset').addEventListener('click', () => { for (const k in state) delete state[k]; hint.textContent = ''; render(); });
+
+  render();
+  setInterval(render, 200);
+</script>
+</body>
+</html>
